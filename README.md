@@ -1,66 +1,67 @@
-# 🛡️ Kurumsal Siber Güvenlik & Bellek Optimizasyonu: Bloom Filter Simülasyonu
+# 🛡️ OmniFilter Enterprise Suite: Multi-Layered Memory & Security Optimization
 
-Bu proje; yüksek trafikli siber güvenlik, antivirüs (EDR) ve web ağ altyapılarında (WAF/CDN) karşılaşılan **Disk I/O darboğazlarını ve veritabanı maliyetlerini %99 oranında azaltan**, Python tabanlı modüler bir olasılıksal veri yapısı (Bloom Filter) simülasyonudur.
-
----
-
-## 📖 Mimari Hikaye ve Problem
-
-Dehşet verici büyüklükteki veri setlerini (milyonlarca zararlı imza, URL kara listesi veya metin arşivi) klasik veritabanlarında (`PostgreSQL`, `Redis` vb.) sorgulamak, sistemlerde ciddi gecikmelere (Network Latency) ve disk darboğazlarına yol açar. Tamamen bellekte (RAM) tutmak ise gigabaytlarca maliyet yaratır.
-
-**Çözüm:** Bu projede geliştirilen **Bloom Filter** mimarisi sayesinde, milyonlarca kayıt megabaytlar seviyesindeki bit dizilerine sıkıştırılır:
-1. **Kesinlikle Yok (False):** Sorgulanan veri filtrede yoksa, yavaş veritabanına **hiç uğramadan** anında reddedilir (%100 doğruluk).
-2. **Muhtemelen Var (True):** Veri filtrede görünüyorsa, çok küçük bir olasılıksal hata payıyla (`p`) sadece şüpheli kayıtlar derin analiz için ana veritabanına gönderilir.
+> High-performance enterprise security and RAG acceleration system powered by probabilistic Bloom Filter architecture.
 
 ---
 
-## 🚀 Gerçek Dünya Senaryoları & Kullanım Alanları
+## 🚀 Proje Hakkında (About)
+**OmniFilter Enterprise Suite**, büyük ölçekli kurumsal sistemlerde bellek optimizasyonu, gerçek zamanlı zararlı tespiti (EDR), web güvenliği (WAF) ve yapay zeka (RAG) indeksleme süreçlerini milisaniyelik hızlara indiren **hafıza-verimli** bir mimaridir. 
 
-Proje arayüzünde canlı olarak test edebileceğiniz 4 temel kurumsal senaryo bulunmaktadır:
-
-1. **🦠 Malware Tespiti (EDR / Antivirüs):** 
-   Milyonlarca zararlı dosya SHA-256 hash imzasını istemci RAM'inde çok küçük bir alanda tutarak, buluta veya diske sormadan anında güvenli/zararlı filtrelemesi yapar.
-2. **🌐 Web & WAF Güvenliği (Edge Katmanı):** 
-   CDN ve Edge sunucularında bilinen zararlı URI, SQL Injection kalıplarını ve IP'leri milisaniyeler içinde ön filtrelemeden geçirir.
-3. **🌐 URL / Phishing Koruması:** 
-   Tarayıcıların zararlı web sitelerini anlık olarak engellemek için kullandığı kara liste mantığını simüle eder.
-4. **📚 Büyük Metin Arşivleri:** 
-   Milyonlarca kelimelik arşivlerde disk okuma maliyetini sıfıra indirerek kelime arama optimizasyonu sağlar.
+Geleneksel veri tabanlarının ve ağır algoritmaların yarattığı CPU/RAM darboğazını, **Bloom Filter** veri yapısının matematiksel gücünü kullanarak ortadan kaldırır.
 
 ---
 
-## ⚙️ Matematiksel Altyapı ve Formüller
+## 🏗️ Sistem Mimarisi ve Modüller
 
-Filtre, kapasite ($n$) ve hedeflenen hata payı ($p$) değerlerine göre en optimum bellek boyutunu ($m$) ve hash fonksiyonu sayısını ($k$) dinamik olarak hesaplar:
+Proje, 7/24 arka planda çalışan otonom ajanlar (**daemons**) ve görsel bir yönetim panelinden oluşur:
 
-- **Bit Boyutu ($m$):** $$m = -\frac{n \cdot \ln(p)}{(\ln(2))^2}$$
-- **Optimum Hash Sayısı ($k$):** $$k = \frac{m}{n} \cdot \ln(2)$$
+1. **`edr_daemon.py` (Malware & EDR Ajanı):**
+   * `./test_downloads` dizinini 7/24 izler.
+   * Yeni düşen dosyaların SHA-256 imzasını hesaplar.
+   * Bloom Filter belleği üzerinden milisaniyeler içinde zararlı/karantina kontrolü yapar ve tehditleri otomatik tecrit eder.
+
+2. **`waf_proxy.py` (Edge WAF Ağ Geçidi):**
+   * Gelen ağ isteklerini ve web saldırı kalıplarını (SQL Injection, XSS) simüle ederek süzer.
+   * Bilinen tehditleri HTTP 403 ile anında engeller.
+
+3. **`archive_sync.py` (RAG & Metin Arşivi Senkronizatörü):**
+   * `./archive_folder` dizinini izleyerek eklenen belgeleri tokenize eder.
+   * Yapay zeka (LLM) arama motorları için kelime tabanını anında belleğe indeksler, gereksiz yükü önler.
+
+4. **`app.py` (Streamlit Kurumsal Kontrol Paneli):**
+   * Sistem yöneticileri için canlı gözlem, imza yönetimi ve performans metrikleri sunan görsel arayüz.
 
 ---
 
-## 💻 Kurulum ve Çalıştırma
+## 📊 Performans Avantajları
+* **Ultra Düşük Gecikme:** Aramalar ve imza sorguları $O(k)$ karmaşıklığı sayesinde $0.01\text{ ms}$ civarında gerçekleşir.
+* **Sıfır Yanlış Negatif (Zero False Negatives):** Bir öğe filtrede yoksa kesinlikle yoktur garantisi sunar.
+* **Düşük Bellek Tüketimi:** Milyonlarca imza ve kelime, gigabaytlarca RAM harcamadan sıkıştırılmış bit dizilerinde saklanır.
 
-Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları takip edebilirsiniz:
+---
 
-1. **Repoyu Klonlayın:**
+## 🛠️ Kurulum ve Çalıştırma
+
+1. **Depoyu Klonlayın:**
    ```bash
-   git clone <repo-url>
-   cd bloom-filter-project
+   git clone [https://github.com/neslihan6116/bloom-filter-enterprise.git](https://github.com/neslihan6116/bloom-filter-enterprise.git)
+   cd bloom-filter-enterprise
 
+1. Gerekli Kütüphaneleri Yükleyin:
+pip install -r requirements.txt
 
-   Gerekli Kütüphaneleri Yükleyin:
-
-Bash
-pip install streamlit
-Streamlit Arayüzünü Başlatın:
-
-Bash
+2. Görsel Panoyu Başlatın:
 streamlit run app.py
-Tarayıcınızda açılan http://localhost:8501 adresinden interaktif paneli test edebilirsiniz.
 
-🛠️ Teknolojiler
-Python (Modüler Sınıf Mimarisi)
+3. Arka Plan Ajanlarını Çalıştırın (Ayrı Terminallerde):
+python edr_daemon.py
+python waf_proxy.py
+python archive_sync.py
 
-MurmurHash3 / Özelleştirilmiş Hash Fonksiyonları
+🎯 Kullanım Senaryoları
+1. Siber Güvenlik Şirketleri & EDR: Uç nokta zararlı yazılım tespiti ve karantina.
 
-Streamlit (İnteraktif Web Arayüzü & İstatistik Paneli)
+2. E-Ticaret & Finans: Edge seviyesinde hızlı WAF ve saldırı engelleme.
+
+3. Kurumsal RAG & Yapay Zeka: Devasa doküman arşivlerinde hızlı veri eleme ve arama optimizasyonu.
+
